@@ -1,0 +1,2 @@
+commands:
+  - "playsound custom:lobby %player% 0.05"

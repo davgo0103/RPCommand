@@ -1,0 +1,9 @@
+name: RPCommand
+main: RPCommand
+version: 1.0
+author: shi0103
+api-version: 1.20
+commands:
+  rpcreload:
+    description: 重新載入 RPCommand 設定
+    usage: /rpcreload 
