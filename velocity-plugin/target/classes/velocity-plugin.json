@@ -1,0 +1,1 @@
+{"id":"velocityexec","name":"VelocityExec","version":"1.0","description":"Send commands to backend servers via plugin messaging","authors":["shi0103"],"dependencies":[],"main":"tw.yourname.velocityexec.VelocityExecPlugin"}

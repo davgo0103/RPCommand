@@ -17,8 +17,10 @@ import java.io.IOException;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+import java.nio.charset.StandardCharsets;
 
-public class RPCommand extends JavaPlugin implements Listener {
+public class RPCommand extends JavaPlugin implements Listener, PluginMessageListener {
     private final Set<UUID> justJoined = new HashSet<>();
 
     @Override
@@ -26,6 +28,9 @@ public class RPCommand extends JavaPlugin implements Listener {
         saveDefaultConfig();
         createConfigIfNotExists();
         Bukkit.getPluginManager().registerEvents(this, this);
+        // 註冊 Plugin Messaging Channel
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, "rpcommand:main", this);
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "rpcommand:main");
     }
 
     private void createConfigIfNotExists() {
@@ -86,5 +91,16 @@ public class RPCommand extends JavaPlugin implements Listener {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+        if (!channel.equals("rpcommand:main")) return;
+        // 只允許來自代理的訊息（通常 player 會是任一在線玩家）
+        String command = new String(message, StandardCharsets.UTF_8);
+        // 以 Console 身份執行
+        Bukkit.getScheduler().runTask(this, () -> {
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+        });
     }
 } 
